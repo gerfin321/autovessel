@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autovessel Web</title>
+  <meta name="description" content="Клиентская веб-версия Autovessel для GitHub Pages: загрузка XLSX и скачивание ZIP с DOCX-документами по компаниям.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <div class="page-glow page-glow-a"></div>
+    <div class="page-glow page-glow-b"></div>
+
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Autovessel Web</p>
+        <h1>Загружаете один <span>XLSX</span>, получаете ZIP с отдельными <span>DOCX</span></h1>
+        <p class="hero-text">
+          Веб-версия работает прямо в браузере и подходит для GitHub Pages. Никакой сервер не нужен:
+          файл обрабатывается локально у пользователя.
+        </p>
+      </div>
+
+      <div class="hero-stat-panel">
+        <div class="stat-card">
+          <strong>Browser-only</strong>
+          <span>Без бэкенда и без установки</span>
+        </div>
+        <div class="stat-card">
+          <strong>XLSX → DOCX</strong>
+          <span>Отдельные документы по компаниям</span>
+        </div>
+        <div class="stat-card">
+          <strong>GitHub Pages</strong>
+          <span>Достаточно залить папку `docs`</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel control-panel">
+        <div class="panel-heading">
+          <h2>Исходный файл</h2>
+          <p>Выберите Excel-файл и запустите обработку.</p>
+        </div>
+
+        <label class="dropzone" for="xlsxFile">
+          <input id="xlsxFile" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+          <span class="dropzone-label">Выбрать XLSX</span>
+          <span id="fileName" class="dropzone-hint">Файл ещё не выбран</span>
+        </label>
+
+        <label class="toggle">
+          <input id="addBlankColumn" type="checkbox">
+          <span>Добавить третий пустой столбец в итоговые DOCX</span>
+        </label>
+
+        <div class="actions">
+          <button id="processButton" class="primary-button" type="button">Собрать ZIP с DOCX</button>
+          <button id="clearMappingsButton" class="secondary-button" type="button">Очистить запомненные объединения</button>
+        </div>
+
+        <div class="status-strip">
+          <div>
+            <span class="status-label">Состояние</span>
+            <strong id="statusText">Готово к запуску</strong>
+          </div>
+          <div>
+            <span class="status-label">Сохранённых правил</span>
+            <strong id="mappingCount">0</strong>
+          </div>
+        </div>
+
+        <div class="hint-box">
+          <h3>Как это работает</h3>
+          <ul>
+            <li>Сайт читает только первый лист в XLSX.</li>
+            <li>Находит колонки даты, судна и агентирующей компании автоматически.</li>
+            <li>На выходе скачивает один ZIP, внутри которого лежат отдельные DOCX.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="panel log-panel">
+        <div class="panel-heading">
+          <h2>Журнал обработки</h2>
+          <p>Здесь виден каждый шаг, предупреждения и итог.</p>
+        </div>
+
+        <div id="logOutput" class="log-output" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="decisionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="decisionTitle">
+    <div class="modal-card">
+      <p class="modal-eyebrow">Похожие компании</p>
+      <h2 id="decisionTitle">Нужно решение</h2>
+      <p id="decisionBody" class="modal-body"></p>
+      <div class="modal-actions">
+        <button id="mergeOnceButton" class="primary-button" type="button">Объединить сейчас</button>
+        <button id="mergeRememberButton" class="secondary-button" type="button">Объединить и запомнить</button>
+        <button id="keepSeparateButton" class="ghost-button" type="button">Оставить раздельно</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://stuk.github.io/jszip/dist/jszip.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
