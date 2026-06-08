@@ -510,7 +510,7 @@ function isDateHeader(value) {
 }
 
 function isVesselHeader(value) {
-  return value === "назва" || value === "название" ||
+  return value === "Назва судна" || value === "Назва судна" ||
     (containsInsensitive(value, "наз") && containsInsensitive(value, "суд"));
 }
 
